@@ -1,11 +1,17 @@
 from argparse import ArgumentParser
-from typing import Optional
 from datetime import datetime
+
 import serial
+
+from typing import Optional
 
 def main(port: str, baudrate: int, timeout: float, out: str, echo: bool, handshake: bool):
 
     with serial.Serial(port, baudrate, timeout=timeout) as dev:
+        
+        print ("Press enter to begin.")
+        input()
+
         if handshake:
             signal = int.to_bytes(0xFF, length=1, byteorder='big')
     
@@ -18,20 +24,32 @@ def main(port: str, baudrate: int, timeout: float, out: str, echo: bool, handsha
 
             print("Handshake completed!")
 
+            dev.readline()
+
         with open(out, 'w') as f:
             while True:
                 data = dev.readline()
+            
+                # Arduino uses ASCII encoding
+                msg = data[:-2].decode('ascii')
 
-                if len(data) > 0:
-                    msg = data[:-2].decode('ascii')
-                    if msg == "DONE":
-                        break
-                    else:
-                        f.write(msg)
-                        f.write('\n')
-
-                if echo:
-                    print(msg)
+                # Lines marked with ECHO: are treated as debug output.
+                if not msg.startswith("ECHO:"):
+                    if len(data) > 0:  # Valid transission 
+                        # Stop saving 
+                        if msg == "DONE":
+                            break
+                        else:
+                            f.write(msg)
+                            f.write('\n')
+                    
+                    if echo:
+                        print(msg)
+                else:
+                    # 012345  ...       -1
+                    # ECHO Hello, World!\n
+                    #      ^------_----^ is selected
+                    print(msg[5:].lstrip())
         
     
 
@@ -54,7 +72,6 @@ if __name__ == "__main__":
         "--name",
         help="Name of output file",
         default="out {:%Y-%m-%d %H.%M.%S}.csv".format(datetime.now()),
-        #default="out.csv",
         type=str
     )
     
@@ -67,7 +84,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--echo",
-        help="Echo serial data",
+        help="Echo logging data",
         action="store_true"
     )
 
