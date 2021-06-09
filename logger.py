@@ -98,8 +98,8 @@ def main(port: str, baudrate: int, timeout: float, out: str, echo: bool, handsha
                             f.write(msg)
                             f.write('\n')
                     
-                    if echo:
-                        print(msg)
+                        if echo:
+                            print(msg)
                 else:
                     # 012345  ...       -1
                     # ECHO:Hello, World!\n
@@ -229,6 +229,8 @@ if __name__ == "__main__":
 
     if not args.echo:
         echo = loaded_args.echo
+    else:
+        echo = args.echo
 
     if args.timeout < 0:
         timeout = loaded_args.timeout
@@ -254,6 +256,6 @@ if __name__ == "__main__":
         name = args.name[:-4] if loaded_args.name.endswith('.csv') else args.name
         out = "{}{}{}".format(name, time, ".csv")
 
-    print(port, baud, out, echo, timeout, handshake)
+    #print(port, baud, out, echo, timeout, handshake)
     
-    #main(port, baud, timeout, out, echo, handshake)
+    main(port, baud, timeout, out, echo, handshake)

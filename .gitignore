@@ -2,6 +2,12 @@
 *.csv
 logs/
 
+# random tests
+test*
+
+# configs
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
