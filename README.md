@@ -24,6 +24,8 @@ optional arguments:
                         .json or .yaml config file with logger configuration
 ```
 
+### Command-line Side
+
 #### Example Usage
 
 ```
@@ -41,6 +43,32 @@ It is also possible to use a configuration specified in a YAML or JSON files. Th
 ```
 
 The above command will use the config specified in `config.yml`. Missing or `null` values in the config are treated as default values by the program. Extra values provided are ignored.
+
+
+
+### Arduino Side
+
+Make sure to include the `setup_log`() function and to call after `Serial.begin()`
+
+```c++
+void setup_log()
+{
+    do
+    {
+        Serial.write(0xFF);
+        delay(50);
+    } while(Serial.read() != 0xFF);
+    
+    Serial.println(); // Flush the output for the logger
+    Serial.println("VarX,VarY,VarZ");
+}
+
+void setup()
+{
+    Serial.begin(BAUDRATE);
+    setup_log();
+}
+```
 
 ## Installation
 
