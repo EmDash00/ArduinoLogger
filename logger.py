@@ -174,7 +174,8 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--timestamp",
-        help="Timestamp output file",
+        help="Whether or not to apppend a timestamp to the output file. By "
+             "default, true",
         action="store_true"
     )
 
