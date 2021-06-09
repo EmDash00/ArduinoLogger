@@ -158,6 +158,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--baud",
+        "-b",
         help="Baud rate of the communications. By default 9600",
         default=-1,
         type=int
@@ -165,6 +166,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--name",
+        "-n",
         help="Name of output file",
         default="",
         type=str
@@ -178,6 +180,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--timeout",
+        "-t",
         help="Communications timeout in seconds. By default 0.1s",
         default=-1,
         type=float
@@ -185,6 +188,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--echo",
+        "-e",
         help="Echo logging data",
         action="store_true"
     )
@@ -197,6 +201,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--config",
+        "-c",
         help=".json or .yaml config file with logger configuration",
         type=Path,
         default=""
