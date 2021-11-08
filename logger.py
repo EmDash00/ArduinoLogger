@@ -108,26 +108,30 @@ def main(
                 while True:
                     data = dev.readline()
 
-                    # Arduino uses ASCII encoding
-                    msg = data[:-2].decode('ascii')
+                    try:
+                        # Arduino uses ASCII encoding
+                        msg = data[:-2].decode('ascii')
 
-                    # Lines marked with ECHO: are treated as debug output.
-                    if not msg.startswith("ECHO:"):
-                        if len(data) > 0:  # Valid transission
-                            # Stop saving
-                            if msg == "DONE":
-                                break
-                            else:
-                                f.write(msg)
-                                f.write('\n')
+                        # Lines marked with ECHO: are treated as debug output.
+                        if not msg.startswith("ECHO:"):
+                            if len(data) > 0:  # Valid transission
+                                # Stop saving
+                                if msg == "DONE":
+                                    break
+                                else:
+                                    f.write(msg)
+                                    f.write('\n')
 
-                            if echo:
-                                print(msg)
-                    else:
-                        # 012345  ...       -1
-                        # ECHO:Hello, World!\n
-                        #      ^-----------^ is selected
-                        print(msg[5:].lstrip())
+                                if echo:
+                                    print(msg)
+                        else:
+                            # 012345  ...       -1
+                            # ECHO:Hello, World!\n
+                            #      ^-----------^ is selected
+                            print(msg[5:].lstrip())
+
+                    except UnicodeDecodeError:
+                        pass
 
     except SerialException:
         print("specified port does not name a valid device.")
